@@ -32,3 +32,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+local.env
+/src/main/resources/firebase_authentication_config.json
