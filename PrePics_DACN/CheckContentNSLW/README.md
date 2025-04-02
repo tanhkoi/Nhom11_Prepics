@@ -6,14 +6,7 @@
 
 ## Setup Instructions (VsCode)
 
-### 1. Clone the Repository
-
-```sh
- git clone https://github.com/yourusername/nsfw-image-api.git
- cd nsfw-image-api
-```
-
-### 2. Create and Activate Virtual Environment (rec)
+### 1. Create and Activate Virtual Environment (rec)
 
 #### On Windows:
 
@@ -22,18 +15,19 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-### 3. Install Required Libraries
+### 2. Install Required Libraries
 
 ```sh
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Run the API
+### 3. Run the API
 
 ```sh
 python app.py
 ```
 
-- **model.safetensors** is about 343M
+- **model.safetensors** is about 343Mb
 - Ensure you are using Python **3.11.4**.
+- Learn how to work with [Python's venv](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/)
