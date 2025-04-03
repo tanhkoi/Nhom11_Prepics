@@ -57,6 +57,7 @@ class CommentApiServiceTest {
         mockComment.setUserId(mockUser.getId());
     }
 
+//    Delete Comment
     @Test
     void testDeleteComment_Success() throws ChangeSetPersister.NotFoundException {
         when(userService.findByEmail(User.class, mockUser.getEmail())).thenReturn(Optional.of(mockUser));
@@ -120,4 +121,59 @@ class CommentApiServiceTest {
 
         assertEquals(BAD_REQUEST.value(), response.getStatusCodeValue());
     }
+
+//    Create comment
+@Test
+void testCreateComment_Success() throws ChangeSetPersister.NotFoundException {
+    when(authentication.getPrincipal()).thenReturn(mockUser);
+    when(userService.findByEmail(User.class, mockUser.getEmail())).thenReturn(Optional.of(mockUser));
+    when(commentService.create(any(Comment.class))).thenReturn(Optional.of(mockComment));
+
+    ResponseEntity<?> response = commentApiService.createComment(authentication, mockComment);
+
+    assertEquals(200, response.getStatusCodeValue());
+}
+
+    @Test
+    void testCreateComment_PostNotFound() throws ChangeSetPersister.NotFoundException {
+        when(authentication.getPrincipal()).thenReturn(mockUser);
+        when(userService.findByEmail(User.class, mockUser.getEmail())).thenReturn(Optional.of(mockUser));
+        when(commentService.create(any(Comment.class))).thenReturn(Optional.empty());
+
+        ResponseEntity<?> response = commentApiService.createComment(authentication, mockComment);
+
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void testCreateComment_InvalidAuthentication() {
+        when(authentication.getPrincipal()).thenThrow(new RuntimeException("Invalid Auth"));
+
+        ResponseEntity<?> response = commentApiService.createComment(authentication, mockComment);
+
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void testCreateComment_DatabaseError() throws ChangeSetPersister.NotFoundException {
+        when(authentication.getPrincipal()).thenReturn(mockUser);
+        when(userService.findByEmail(User.class, mockUser.getEmail())).thenReturn(Optional.of(mockUser));
+        when(commentService.create(any(Comment.class))).thenThrow(new RuntimeException("DB Error"));
+
+        ResponseEntity<?> response = commentApiService.createComment(authentication, mockComment);
+
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    void testCreateComment_InvalidCommentData() throws ChangeSetPersister.NotFoundException {
+        when(authentication.getPrincipal()).thenReturn(mockUser);
+        when(userService.findByEmail(User.class, mockUser.getEmail())).thenReturn(Optional.of(mockUser));
+        when(commentService.create(any(Comment.class))).thenThrow(new RuntimeException("Invalid Comment Data"));
+
+        ResponseEntity<?> response = commentApiService.createComment(authentication, mockComment);
+
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
 }
