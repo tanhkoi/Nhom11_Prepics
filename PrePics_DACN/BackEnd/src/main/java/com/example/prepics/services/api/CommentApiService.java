@@ -79,7 +79,7 @@ public class CommentApiService {
           .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
       if (!comment.getUserId().equals(user.getId())) {
-        return ResponseProperties.createResponse(403, "Unauthorized", null);
+        return ResponseProperties.createResponse(401, "Unauthorized", null);
       }
 
       commentService.delete(commentId);

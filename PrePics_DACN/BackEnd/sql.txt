@@ -1,0 +1,211 @@
+create table "user"
+(
+    id            varchar(450) not null
+        primary key,
+    user_name     varchar(255),
+    full_name     varchar(255),
+    email         varchar(255),
+    description   varchar(1000),
+    address       varchar(255),
+    website_url   varchar(255),
+    twitter_url   varchar(255),
+    instagram_url varchar(255),
+    role_id       integer,
+    is_active     boolean,
+    is_admin      boolean,
+    avatar_url    varchar
+);
+
+alter table "user"
+    owner to postgres;
+
+create table tag
+(
+    id   serial
+        primary key,
+    name varchar(255)
+);
+
+alter table tag
+    owner to postgres;
+
+create table content
+(
+    id          varchar(450) not null
+        constraint gallery_pkey
+            primary key,
+    name        varchar,
+    location    varchar(255),
+    date_upload bigint,
+    liked       integer,
+    downloads   integer,
+    views       integer,
+    height      integer,
+    width       integer,
+    data_url    varchar,
+    is_public   boolean,
+    asset_id    varchar,
+    user_id     varchar(450)
+        constraint gallery_user_id_fkey
+            references "user"
+            on delete cascade,
+    type        boolean,
+    description varchar,
+    data_byte   varchar
+);
+
+alter table content
+    owner to postgres;
+
+create table collection
+(
+    id          serial
+        primary key,
+    name        varchar(255),
+    user_id     varchar(450)
+        references "user"
+            on delete cascade,
+    date_create bigint,
+    is_public   boolean
+);
+
+alter table collection
+    owner to postgres;
+
+create table incols
+(
+    id            serial
+        primary key,
+    content_id    varchar(450)
+        references content
+            on delete cascade,
+    collection_id bigint
+        references collection
+            on delete cascade
+);
+
+alter table incols
+    owner to postgres;
+
+create table gottags
+(
+    id         serial
+        primary key,
+    content_id varchar(450)
+        constraint gottags_gallery_id_fkey
+            references content
+            on delete cascade,
+    tag_id     bigint
+        references tag
+            on delete cascade
+);
+
+alter table gottags
+    owner to postgres;
+
+CREATE TABLE followers (
+    id SERIAL PRIMARY KEY,
+    follower_id VARCHAR(450) NOT NULL
+        REFERENCES "user"(id)
+        ON DELETE CASCADE,
+    user_id VARCHAR(450) NOT NULL
+        REFERENCES "user"(id)
+        ON DELETE CASCADE
+);
+
+alter table followers
+    owner to postgres;
+
+create table followees
+(
+    id          serial
+        constraint followees_pk
+            primary key,
+    user_id     varchar
+        constraint followees_user_id_fk
+            references "user"
+            on delete cascade,
+    followee_id varchar
+        constraint followees_user_id_fk_2
+            references "user"
+            on delete cascade
+);
+
+alter table followees
+    owner to postgres;
+
+create table comment
+(
+    id          serial
+        constraint comment_pk
+            primary key,
+    content     varchar not null,
+    user_id     varchar
+        constraint comment_user_id_fk
+            references "user"
+            on delete cascade,
+    content_id  varchar
+        constraint comment_content_id_fk
+            references content
+            on delete cascade,
+    date_create bigint
+);
+
+insert into public.user (id, user_name, full_name, email, description, address, website_url, twitter_url, instagram_url, role_id, is_active, is_admin, avatar_url) values ('PTu8pEVjLlXaC5M4TuiMTUHhUEP2', 'phamkhac2004', 'pham khac', 'phamkhac2004@gmail.com', '', null, null, '', '', null, true, false, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713280/j7frwemlqfxgyxkjocpi.jpg');
+insert into public.user (id, user_name, full_name, email, description, address, website_url, twitter_url, instagram_url, role_id, is_active, is_admin, avatar_url) values ('RKs9taC5pbXbZKhzPqH4jlBl0iN2', 'phamkhac2003', 'Phạm Khắc', 'phamkhac2003@gmail.com', null, null, null, null, null, null, true, true, 'https://lh3.googleusercontent.com/a/ACg8ocLMTJbl_zexDxZFaY2bZQDGyuVWzyE2bplxRnOZiFJsPTRMrQ=s96-c');
+insert into public.user (id, user_name, full_name, email, description, address, website_url, twitter_url, instagram_url, role_id, is_active, is_admin, avatar_url) values ('47JhTQj3JfVmFuA6VDlNz5AG9Q52', 'ppamkhac', 'ppamkhac', 'ppamkhac@gmail.com', 'aaaaaaaa', null, null, '', '', null, true, false, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734743893/qo57vlfaglkvupy1huki.jpg');
+insert into public.user (id, user_name, full_name, email, description, address, website_url, twitter_url, instagram_url, role_id, is_active, is_admin, avatar_url) values ('apEPX20MHTTgX5rA8UAXeVZAPON2', 'khcahpam', 'Hpam Khca', 'khcahpam@gmail.com', null, null, null, null, null, null, true, false, 'https://lh3.googleusercontent.com/a/ACg8ocKd9XSrsv5uvhv2_c6dBzIuCR8GFNHBHgQ9CNfaWYpme1HFeA=s96-c');
+
+insert into public.collection (id, name, user_id, date_create, is_public) values (98, 'Liked', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', 1734713032541, false);
+insert into public.collection (id, name, user_id, date_create, is_public) values (99, 'Liked', 'apEPX20MHTTgX5rA8UAXeVZAPON2', 1734713060408, false);
+insert into public.collection (id, name, user_id, date_create, is_public) values (100, 'Liked', '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 1734713091810, false);
+insert into public.collection (id, name, user_id, date_create, is_public) values (101, 'Mục yêu thích', '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 1734714740986, false);
+insert into public.collection (id, name, user_id, date_create, is_public) values (102, 'Liked', 'RKs9taC5pbXbZKhzPqH4jlBl0iN2', 1734742787523, false);
+insert into public.collection (id, name, user_id, date_create, is_public) values (103, 'Động vật', '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 1734743531854, false);
+
+insert into public.tag (id, name) values (55, 'Do An');
+insert into public.tag (id, name) values (56, 'Thien Nhien');
+insert into public.tag (id, name) values (57, 'Phong Canh');
+insert into public.tag (id, name) values (58, 'Dong Vat');
+
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('lnjgszawthuskin6zf4d', 'pexels-kmerriman-20787.jpg', null, 1734713726836, 1, 4, 0, 2304, 3456, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713724/lnjgszawthuskin6zf4d.jpg', true, '1417bf73266f3731440e557c0fa06cf9', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Con mèo', '001011011100001001011010011110000010010000111111101111111000011');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('yhhxh5rcn9afrru4apxn', 'gallery-11.jpg', null, 1734713670964, 0, 2, 0, 1440, 1920, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713668/yhhxh5rcn9afrru4apxn.jpg', true, '0332eeb435caf813a2e9455f1ad4add0', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Con bướm', '110011010110101100110001010001110010101010010100010100010001001');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('umeocokkglox0vqha9ih', '12701640_2560_1440_24fps.mp4', null, 1734713588232, 0, 1, 0, 1440, 2560, 'http://res.cloudinary.com/drw51zabb/video/upload/v1734713584/umeocokkglox0vqha9ih.mp4', true, 'd13f3f1a27cacb3105d944925a7bb60f', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', false, 'Khinh khí cầu', '20ef5fe2');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('xun2yzrsw0dvjxdj6kd1', 'pexels-chevanon-1108099.jpg', null, 1734743664919, 0, 0, 0, 3888, 5184, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734743662/xun2yzrsw0dvjxdj6kd1.jpg', true, 'f4926566a7446b656b7c9048e028a959', '47JhTQj3JfVmFuA6VDlNz5AG9Q52', true, 'Chó', '100000101111111000101101001100001101101011011110011001110011010');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('xzyiwatmu3yjksfbjglo', '12811303_3840_2160_60fps.mp4', null, 1734743744868, 0, 0, 0, 2160, 3840, 'http://res.cloudinary.com/drw51zabb/video/upload/v1734743737/xzyiwatmu3yjksfbjglo.mp4', true, '036878e12b00bde9acd4288f7a304bfc', '47JhTQj3JfVmFuA6VDlNz5AG9Q52', false, 'Núi ', '72a3a6f0');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('xvnuhvdcvpqb9tosxizt', 'pexels-sergio-arreola-208344354-24182617.jpg', null, 1734713402349, -1, 1, 0, 2000, 3000, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713400/xvnuhvdcvpqb9tosxizt.jpg', true, 'bee04b5319ef99ba486357e4578ae60e', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Thịt gà', '110111101110110100110111100100100000000111100001011101000011111');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('oxlgnmppp0zcxn6qrh7m', 'gallery-3.jpg', null, 1734713369888, 0, 0, 0, 1440, 1920, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713367/oxlgnmppp0zcxn6qrh7m.jpg', true, '62ac4217af8b47ec5583181d44bb8fc7', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Trái dâu', '001010100111111011010001100101101101011110011000110101011100110');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('xwn80tbl0vbn2nkbcmlm', 'gallery-14.jpg', null, 1734713387284, 0, 0, 0, 1440, 1920, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713385/xwn80tbl0vbn2nkbcmlm.jpg', true, '897e066209a40e6cd352eb6e1f9b373d', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Thịt bò', '101101010001010111001100100010001101001001011010000010110000001');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('lbis46jdmuuaxulvitrv', 'pexels-sydney-troxell-223521-708587.jpg', null, 1734714903040, 0, 0, 0, 3409, 4900, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734714899/lbis46jdmuuaxulvitrv.jpg', true, 'd652eac7b76b3a83069c095e852e66b8', '47JhTQj3JfVmFuA6VDlNz5AG9Q52', true, 'Pizza', '101010100000001011010101100000011100001111100001001010001111010');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('xh8ovynqsjsy0qtxy4fx', 'gallery-4.jpg', null, 1734713656868, 0, 0, 0, 1440, 1920, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713654/xh8ovynqsjsy0qtxy4fx.jpg', true, 'f44d26e3f4c9346ed27a2b6a7dee3a8d', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Con vẹt', '000011010110000001011101000110101000110011000100111000111100111');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('jq9ojilcg3mx08vnftcl', 'pexels-tara-winstead-6479607.jpg', null, 1734713433053, 0, 0, 0, 2917, 4375, 'http://res.cloudinary.com/drw51zabb/image/upload/v1734713430/jq9ojilcg3mx08vnftcl.jpg', true, '388a4b78c791e953ef2f9c0f92696a6d', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', true, 'Bánh mì', '000101101100011111101000001010001001110111111001000000010010001');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('vzakxknzi4e2c8nbawgb', '3028399-uhd_3840_2160_24fps.mp4', null, 1734713515409, 0, 0, 0, 2160, 3840, 'http://res.cloudinary.com/drw51zabb/video/upload/v1734713510/vzakxknzi4e2c8nbawgb.mp4', true, '8e2961e09a3f2c98f8cc72f0c2961139', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', false, 'Rừng', 'a923a613');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('pknstijqg5gqxvzwfvdn', '12776321_3840_2160_30fps.mp4', null, 1734713770310, 0, 0, 0, 2160, 3840, 'http://res.cloudinary.com/drw51zabb/video/upload/v1734713766/pknstijqg5gqxvzwfvdn.mp4', true, '87a035c131c51d451b73a5d4b25e6183', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', false, 'Tuyết', 'd27392fb');
+insert into public.content (id, name, location, date_upload, liked, downloads, views, height, width, data_url, is_public, asset_id, user_id, type, description, data_byte) values ('qsuweawk5bj3ckdt2vdp', '5844264-uhd_3840_2160_30fps.mp4', null, 1734713829870, 0, 0, 0, 2160, 3840, 'http://res.cloudinary.com/drw51zabb/video/upload/v1734713825/qsuweawk5bj3ckdt2vdp.mp4', true, '0c5a7c52dac1558c0e61dc7fce63dd41', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2', false, 'Nhà', '5fd6c26f');
+
+insert into public.followees (id, user_id, followee_id) values (126, 'apEPX20MHTTgX5rA8UAXeVZAPON2', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2');
+insert into public.followees (id, user_id, followee_id) values (130, 'apEPX20MHTTgX5rA8UAXeVZAPON2', '47JhTQj3JfVmFuA6VDlNz5AG9Q52');
+insert into public.followees (id, user_id, followee_id) values (134, '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2');
+insert into public.followees (id, user_id, followee_id) values (137, '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 'apEPX20MHTTgX5rA8UAXeVZAPON2');
+
+insert into public.followers (id, follower_id, user_id) values (111, 'apEPX20MHTTgX5rA8UAXeVZAPON2', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2');
+insert into public.followers (id, follower_id, user_id) values (114, 'apEPX20MHTTgX5rA8UAXeVZAPON2', '47JhTQj3JfVmFuA6VDlNz5AG9Q52');
+insert into public.followers (id, follower_id, user_id) values (115, '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 'PTu8pEVjLlXaC5M4TuiMTUHhUEP2');
+insert into public.followers (id, follower_id, user_id) values (118, '47JhTQj3JfVmFuA6VDlNz5AG9Q52', 'apEPX20MHTTgX5rA8UAXeVZAPON2');
+
+insert into public.gottags (id, content_id, tag_id) values (123, 'oxlgnmppp0zcxn6qrh7m', 55);
+insert into public.gottags (id, content_id, tag_id) values (124, 'xwn80tbl0vbn2nkbcmlm', 55);
+insert into public.gottags (id, content_id, tag_id) values (125, 'xvnuhvdcvpqb9tosxizt', 55);
+insert into public.gottags (id, content_id, tag_id) values (126, 'jq9ojilcg3mx08vnftcl', 55);
+insert into public.gottags (id, content_id, tag_id) values (127, 'vzakxknzi4e2c8nbawgb', 56);
+insert into public.gottags (id, content_id, tag_id) values (128, 'umeocokkglox0vqha9ih', 57);
+insert into public.gottags (id, content_id, tag_id) values (129, 'xh8ovynqsjsy0qtxy4fx', 58);
+insert into public.gottags (id, content_id, tag_id) values (130, 'yhhxh5rcn9afrru4apxn', 58);
+insert into public.gottags (id, content_id, tag_id) values (132, 'lnjgszawthuskin6zf4d', 58);
+insert into public.gottags (id, content_id, tag_id) values (133, 'pknstijqg5gqxvzwfvdn', 56);
+insert into public.gottags (id, content_id, tag_id) values (134, 'qsuweawk5bj3ckdt2vdp', 57);
+insert into public.gottags (id, content_id, tag_id) values (135, 'lbis46jdmuuaxulvitrv', 55);
+insert into public.gottags (id, content_id, tag_id) values (136, 'xun2yzrsw0dvjxdj6kd1', 58);
+insert into public.gottags (id, content_id, tag_id) values (137, 'xzyiwatmu3yjksfbjglo', 56);
+
+insert into public.incols (id, content_id, collection_id) values (146, 'yhhxh5rcn9afrru4apxn', 103);
