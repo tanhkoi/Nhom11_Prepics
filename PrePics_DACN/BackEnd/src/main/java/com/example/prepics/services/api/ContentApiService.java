@@ -408,7 +408,7 @@ public class ContentApiService {
     }
   }
 
-  private ResponseEntity<?> populateLikedContent(Authentication authentication,
+  public ResponseEntity<?> populateLikedContent(Authentication authentication,
       List<Content> contents)
       throws ChangeSetPersister.NotFoundException {
     if (authentication != null) {
