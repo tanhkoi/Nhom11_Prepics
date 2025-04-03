@@ -38,11 +38,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Optional<User> create(User entity)
-      throws EntityExistsException, ChangeSetPersister.NotFoundException {
+  public Optional<User> create(User entity) throws EntityExistsException {
     return userRepository.create(entity);
   }
-
   @Override
   public Optional<User> findById(Class<User> clazz, String s)
       throws ChangeSetPersister.NotFoundException {

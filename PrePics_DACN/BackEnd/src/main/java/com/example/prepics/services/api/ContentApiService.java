@@ -330,7 +330,7 @@ public class ContentApiService {
     return downloadFileAsBytes(url);
   }
 
-  private byte[] downloadFileAsBytes(String fileUrl) throws IOException {
+  public byte[] downloadFileAsBytes(String fileUrl) throws IOException {
     URL url = new URL(fileUrl);
     try (InputStream inputStream = url.openStream();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
