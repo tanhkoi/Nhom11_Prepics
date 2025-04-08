@@ -160,7 +160,7 @@ public class CollectionApiService {
   public ResponseEntity<?> removeContentToCollection(Authentication authentication,
       Long collectionId, String contentId) {
     try {
-      User user = getAuthenticatedUser(authentication);
+      User user = getAuthenticatedUser(authentication); // this is conflict 
 
       Collection collection = collectionService.findById(Collection.class, collectionId)
           .orElseThrow(ChangeSetPersister.NotFoundException::new);
