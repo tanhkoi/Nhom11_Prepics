@@ -133,4 +133,5 @@ public class SecurityFilter extends OncePerRequestFilter {
       throw new IllegalArgumentException("Email do not have the extension @example.com");
     }
   }
+  
 }
