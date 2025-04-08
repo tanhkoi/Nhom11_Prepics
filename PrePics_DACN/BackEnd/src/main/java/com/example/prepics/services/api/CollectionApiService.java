@@ -187,5 +187,4 @@ public class CollectionApiService {
       return ResponseProperties.createResponse(400, e.getMessage(), null);
     }
   }
-
 }
